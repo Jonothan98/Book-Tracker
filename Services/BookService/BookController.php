@@ -11,23 +11,18 @@ switch($method){
     case 'GET':
         handleGet($input);
         break;
-    case 'POST':
-        handelPost($input);
-        break;
-    case 'PUT':
-        handlePut($input);
-        break;
-    case 'DELETE':
-        handleDelete($input);
-        break;
     default:
         echo json_encode(['message' => 'Invalid request method']);
         break;
 }
     function handleGet($input){
         global $bookCalls;
-        $bookCalls->setWorkKey($input['key']);
-        $bookCalls->getBooks();
+        if(array_key_exists('key',$input)){
+            $bookCalls->getBooks($input['key']);
+        } elseif (array_key_exists('search',$input)){
+            $bookCalls->searchBooks($input['search']);
+        }
+        
     }
 
 ?>

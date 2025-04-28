@@ -2,20 +2,33 @@
 
 class BookCalls
 {
-    private $searchRequest;
-    private $workKey;
-
-    public function setSearchRequest($searchRequest)
+    public function searchBooks($searchRequest)
     {
-        $this->searchRequest = $searchRequest;
-    }
+        $url = 'https://openlibrary.org/search.json?q=' . $searchRequest;
 
-    public function setWorkKey($workKey)
+        $searchData = $this->getApiCall($url);
+
+        echo json_encode($searchData);
+
+    }
+    public function getBooks($workKey)
     {
-        $this->workKey = $workKey;
-    }
+        $worksData = [];
+        if (is_array($workKey)) {
+            foreach ($workKey as $key) {
+                $url = 'https://openlibrary.org/works/' . $key . '.json';
+                $worksData[] = $this->getApiCall($url);
+            }
+        } else {
+            $url = 'https://openlibrary.org/works/' . $workKey . '.json';
 
-    private function getApiCall($url){
+            $worksData = $this->getApiCall($url);
+        }
+
+        echo json_encode($worksData);
+    }
+    private function getApiCall($url)
+    {
         $curl = curl_init($url);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -26,31 +39,6 @@ class BookCalls
 
         return $searchData;
 
-    }
-    public function searchBooks()
-    {
-        $url = 'https://openlibrary.org/search.json?q=' . $this->searchRequest;
-
-        $searchData = $this->getApiCall($url);
-
-        echo $searchData->docs[0]->title;
-
-    }
-    public function getBooks()
-    {
-        $worksData =[];
-        if (is_array($this->workKey)) {
-            foreach($this->workKey as $key){
-                $url = 'https://openlibrary.org/works/' . $key . '.json';
-                $worksData[] = $this->getApiCall($url);
-            }
-        } else {
-            $url = 'https://openlibrary.org/works/' . $this->workKey . '.json';
-    
-            $worksData = $this->getApiCall($url);
-        }
-
-        echo json_encode($worksData);
     }
 }
 
