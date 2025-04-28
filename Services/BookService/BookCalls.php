@@ -1,7 +1,8 @@
 <?php
-
+include 'BookData.php';
 class BookCalls
 {
+    private $bookData = ""; 
     public function searchBooks($searchRequest)
     {
         $url = 'https://openlibrary.org/search.json?q=' . $searchRequest;
@@ -23,6 +24,8 @@ class BookCalls
             $url = 'https://openlibrary.org/works/' . $workKey . '.json';
 
             $worksData = $this->getApiCall($url);
+            $authorData = $this->getApiCall('https://openlibrary.org/'. $worksData->authors->author->key .'.json');
+            $this->bookData = new BookData($workKey,$worksData->title,$authorData->name,$worksData->covers[0]);
         }
 
         echo json_encode($worksData);
