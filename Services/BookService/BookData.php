@@ -2,12 +2,12 @@
 
 class BookData
 {
-    private $key;
-    private $title;
-    private $author;
-    private $cover;
+    public $key;
+    public $title;
+    public $author;
+    public $cover;
 
-    function __construct($key, $title, $author, $cover)
+    public function __construct($key, $title, $author, $cover)
     {
         $this->key = $key;
         $this->title = $title;
